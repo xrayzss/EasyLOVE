@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EasyLOVE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff6b95;
+            --primary-light: #ffcbd1;
+            --primary-glow: rgba(255, 107, 149, 0.4);
+            --surface: rgba(18, 12, 23, 0.7);
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --crystal-edge: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #c9b4d1;
+            --input-bg: rgba(255, 255, 255, 0.02);
+            --ease-deep: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            min-height: 100vh; background-color: #0d0a18;
+            background-image: radial-gradient(at 10% 10%, hsla(330, 95%, 65%, 0.2) 0px, transparent 40%), radial-gradient(at 90% 90%, hsla(280, 95%, 65%, 0.2) 0px, transparent 40%), radial-gradient(at 50% 50%, hsla(340, 100%, 76%, 0.1) 0px, transparent 60%), linear-gradient(-45deg, #0d0a18, #1a1025, #0a0a0f);
+            background-size: 200% 200%; animation: gradientBG 8s var(--ease-out-soft) infinite;
+            display: flex; justify-content: center; align-items: center; padding: 2rem 1.5rem; position: relative; color: var(--text-main); overflow-x: hidden;
+        }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        body::before { content: ''; position: absolute; width: 100%; height: 100%; background-image: radial-gradient(var(--crystal-edge) 1px, transparent 1px); background-size: 50px 50px; opacity: 0.1; z-index: 0; animation: particlesFloat 20s linear infinite; }
+        @keyframes particlesFloat { from { transform: translateY(0); } to { transform: translateY(-50px); } }
+
+        .live-visitors { position: absolute; top: 20px; right: 20px; background: rgba(20, 15, 25, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--surface-border); border-radius: 30px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; color: var(--primary-light); font-size: 0.85rem; font-weight: 500; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 100; transition: transform 0.3s var(--ease-deep); }
+        .live-visitors:hover { transform: translateY(-2px); }
+        .live-visitors .dot { width: 8px; height: 8px; background-color: #55efc4; border-radius: 50%; box-shadow: 0 0 12px #55efc4; animation: blink 1.8s infinite var(--ease-out-soft); }
+        @keyframes blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+
+        .creator-card { background: var(--surface); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 32px; padding: 2.5rem 2.5rem; max-width: 540px; width: 100%; border: 1px solid var(--crystal-edge); box-shadow: 0 40px 100px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08); text-align: center; z-index: 10; transform: translateY(30px) scale(0.98); opacity: 0; animation: slideUpFadeDeep 1s var(--ease-out-soft) forwards; }
+        @keyframes slideUpFadeDeep { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        h1 { font-size: 2rem; margin-bottom: 0.2rem; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff 0%, var(--primary-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 span { background: linear-gradient(135deg, var(--primary) 0%, #ffcbd1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        .sub { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; font-weight: 300; line-height: 1.5; }
+
+        .form-group { margin-bottom: 1.4rem; text-align: left; }
+        .form-group label { display: flex; justify-content: space-between; margin-bottom: 8px; color: #ffd1e3; font-size: 0.88rem; font-weight: 500; padding: 0 5px; }
+        .char-count { color: #888; font-size: 0.75rem; font-weight: 400; transition: color 0.3s; }
+        input:focus + label .char-count, textarea:focus + label .char-count { color: var(--primary); }
+        input, textarea { width: 100%; padding: 14px 18px; background: var(--input-bg); border: 1px solid var(--surface-border); border-radius: 16px; font-size: 0.95rem; color: var(--text-main); transition: all 0.4s var(--ease-out-soft); outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); transition: 0.3s; }
+        input:focus::placeholder, textarea:focus::placeholder { opacity: 0.5; }
+        input:focus, textarea:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.04); box-shadow: 0 0 0 4px var(--primary-glow), inset 0 2px 5px rgba(0,0,0,0.1); }
+
+        .theme-selection-wrapper { display: flex; gap: 12px; margin-bottom: 10px; }
+        .theme-btn { flex: 1; padding: 12px; background: var(--input-bg); border: 1px solid var(--surface-border); border-radius: 16px; color: var(--text-muted); cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: all 0.4s var(--ease-deep); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .theme-btn:hover { background: rgba(255, 255, 255, 0.06); color: var(--text-main); transform: translateY(-2px); }
+        .theme-btn.active { background: rgba(255, 107, 149, 0.12); border-color: var(--primary); color: var(--text-main); box-shadow: 0 6px 20px var(--primary-glow); transform: translateY(-3px) scale(1.02); }
+
+        .btn-create { width: 100%; background: linear-gradient(135deg, #ff6b95 0%, #f72585 100%); border: none; border-radius: 16px; padding: 16px; font-size: 1.05rem; font-weight: 600; color: #fff; cursor: pointer; transition: all 0.5s var(--ease-deep); display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 15px 35px -5px rgba(247, 37, 133, 0.4); margin-top: 20px; position: relative; overflow: hidden; }
+        .btn-create::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%); transform: rotate(-45deg); transition: 0.6s var(--ease-out-soft); }
+        .btn-create:hover::after { left: 100%; }
+        .btn-create:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 45px -5px rgba(247, 37, 133, 0.6); }
+        .btn-create:active { transform: translateY(-1px) scale(1); }
+        .btn-create:disabled { background: #3d3445; color: #7a6a8a; box-shadow: none; transform: none; cursor: not-allowed; }
+        .btn-create:disabled::after { display: none; }
+
+        .btn-contact { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1.8rem; color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: 0.3s var(--ease-out-soft); }
+        .btn-contact:hover { color: var(--primary); transform: translateY(-1px); }
+
+        .result-container { margin-top: 2rem; display: none; animation: slideUpFadeSoft 0.7s var(--ease-deep); }
+        @keyframes slideUpFadeSoft { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .qr-wrapper { background: #fff; padding: 16px; border-radius: 20px; display: inline-block; margin-bottom: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: 0.3s var(--ease-out-soft); }
+        .qr-wrapper:hover { transform: scale(1.02); }
+        
+        #qrcode img, #qrcode canvas { width: 100% !important; max-width: 200px !important; height: auto !important; margin: 0 auto; border-radius: 8px; }
+
+        .action-group { display: flex; gap: 12px; justify-content: center; }
+        .btn-action { background: var(--input-bg); border: 1px solid var(--surface-border); color: var(--text-main); padding: 12px 18px; border-radius: 14px; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.4s var(--ease-deep); flex: 1; }
+        .btn-action:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-2px); border-color: var(--crystal-edge); }
+        .btn-preview { background: rgba(255, 107, 149, 0.1); border-color: rgba(255, 107, 149, 0.2); color: #ffdae9; }
+        .btn-preview:hover { background: rgba(255, 107, 149, 0.2); border-color: var(--primary); color: #fff; }
+
+        .loader-wrapper { display: none; flex-direction: column; align-items: center; margin-top: 2rem; height: 100px; justify-content: center;}
+        .heart-loader { color: var(--primary); animation: softBeat 1s infinite cubic-bezier(0.215, 0.61, 0.355, 1); transform-origin: center; }
+        @keyframes softBeat { 0% { transform: scale(0.95); opacity: 0.9; } 10% { transform: scale(1.1); opacity: 1; } 40% { transform: scale(0.88); } 50% { transform: scale(1); opacity: 1; } 60% { transform: scale(0.98); } 100% { transform: scale(0.95); opacity: 0.9; } }
+        
+        #errorMsg { background: rgba(255, 87, 87, 0.08); color: #ff8585; font-size: 0.85rem; padding: 12px 16px; border-radius: 12px; margin-top: 16px; display: none; border: 1px solid rgba(255, 87, 87, 0.15); animation: softShake 0.5s var(--ease-out-soft); }
+        @keyframes softShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+        @media (max-width: 560px) { .creator-card { padding: 2rem 1.5rem; } h1 { font-size: 1.7rem; } .action-group { flex-direction: column; } .btn-action { max-width: 100%; } }
+    </style>
+</head>
+<body>
+
+<div class="live-visitors">
+    <div class="dot"></div>
+    <span class="material-symbols-rounded" style="font-size: 16px;">bolt</span> <span><span id="visitorCount">42</span> คนกำลังใช้งาน</span>
+</div>
+
+<div class="creator-card">
+    <h1><span>Easy</span>LOVE</h1>
+    <div class="sub">สร้าง QR Code บอกความรู้สึกสุดพิเศษให้คนสำคัญของคุณได้ง่ายๆที่นี่<br></div>
+    
+    <div class="form-group">
+        <label><span>หัวข้อ</span><span class="char-count" id="titleCount">0/60</span></label>
+        <input type="text" id="titleInput" placeholder="เช่น : ถึงคนเก่งของเค้าน๊าา" maxlength="60">
+    </div>
+    
+    <div class="form-group">
+        <label><span>ข้อความ</span><span class="char-count" id="msgCount">0/300</span></label>
+        <textarea id="msgInput" rows="3" placeholder="พิมพ์ความรู้สึกดีๆ ที่คุณอยากบอกตรงนี้ได้เลย..." maxlength="300"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label><span>เพลง Spotify (ไม่บังคับ)</span></label>
+        <input type="text" id="spotifyInput" placeholder="วางลิงก์เพลงจาก Spotify เช่น https://open.spotify.com/track/...">
+    </div>
+
+    <div class="form-group">
+        <label>เลือกรูปแบบของขวัญ</label>
+        <div class="theme-selection-wrapper">
+            <button type="button" class="theme-btn active" data-theme="cute">
+                <span class="material-symbols-rounded" style="font-size: 20px;">redeem</span> Gift Box
+            </button>
+            <button type="button" class="theme-btn" data-theme="flower">
+                <span class="material-symbols-rounded" style="font-size: 20px;">local_florist</span> Flower
+            </button>
+        </div>
+    </div>
+    
+    <button class="btn-create" id="createBtn">
+        <span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 1; font-size: 22px;"></span>
+        <span id="btnText">สร้าง QR Code ของขวัญเลยย</span>
+    </button>
+    
+    <div id="errorMsg">กรุณากรอกหัวข้อและข้อความให้ครบถ้วนก่อนน้า!</div>
+
+    <div class="loader-wrapper" id="loader">
+        <div class="heart-loader"><span class="material-symbols-rounded" style="font-size: 46px; font-variation-settings: 'FILL' 1;">favorite</span></div>
+    </div>
+    
+    <div id="resultContainer" class="result-container">
+        <div class="qr-wrapper" id="qrcode"></div>
+        <div class="action-group">
+            <button class="btn-action" id="saveBtn">
+                <span class="material-symbols-rounded" style="font-size: 20px;">download</span> บันทึกรูปภาพ
+            </button>
+            <button class="btn-action btn-preview" id="previewBtn">
+                <span class="material-symbols-rounded" style="font-size: 20px;">visibility</span> ดูตัวอย่าง
+            </button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 20px; font-weight: 300;">ส่งรูปนี้ให้คนสำคัญสแกนได้เลยย</p>
+    </div>
+
+    <a href="https://www.instagram.com/xr4yzn3verd0wn/" target="_blank" class="btn-contact">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+        ติดต่อผู้พัฒนา [EasyLOVE]
+    </a>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyDgNGseZWo4UHpqNAyWAUdZcxkFy_KpL0E",
+    authDomain: "flutter-ai-playground-ccd58.firebaseapp.com",
+    projectId: "flutter-ai-playground-ccd58",
+    storageBucket: "flutter-ai-playground-ccd58.firebasestorage.app",
+    messagingSenderId: "509436977046",
+    appId: "1:509436977046:web:c246aadbedc2e5594547b7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function simulateVisitors() {
+        const counter = document.getElementById('visitorCount');
+        let currentUsers = Math.floor(Math.random() * 20) + 31; 
+        counter.innerText = currentUsers;
+        setInterval(() => {
+            let change = Math.floor(Math.random() * 6) - 2; 
+            currentUsers += change;
+            if(currentUsers < 15) currentUsers = 15; 
+            if(currentUsers > 180) currentUsers -= 10; 
+            counter.style.opacity = 0;
+            setTimeout(() => {
+                counter.innerText = currentUsers;
+                counter.style.opacity = 1;
+            }, 200);
+        }, Math.random() * 4000 + 5000);
+    }
+    document.getElementById('visitorCount').style.transition = 'opacity 0.2s';
+    simulateVisitors(); 
+
+    document.getElementById('titleInput').addEventListener('input', (e) => document.getElementById('titleCount').innerText = `${e.target.value.length}/60`);
+    document.getElementById('msgInput').addEventListener('input', (e) => document.getElementById('msgCount').innerText = `${e.target.value.length}/300`);
+
+    const createBtn = document.getElementById('createBtn');
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    const qrcodeContainer = document.getElementById('qrcode');
+    const errorMsg = document.getElementById('errorMsg');
+    let selectedTheme = 'cute';
+    let currentGeneratedUrl = ''; 
+
+    themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            themeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedTheme = btn.getAttribute('data-theme');
+        });
+    });
+
+    async function generateGift() {
+        let title = document.getElementById('titleInput').value.trim();
+        let msg = document.getElementById('msgInput').value.trim();
+        let spotifyUrl = document.getElementById('spotifyInput').value.trim();
+
+        if (!title || !msg) {
+            errorMsg.style.display = 'block';
+            errorMsg.innerText = 'กรุณากรอกหัวข้อและข้อความก่อนนะ!';
+            return;
+        }
+
+        let spotifyId = "";
+        if (spotifyUrl) {
+            let match = spotifyUrl.match(/track\/([a-zA-Z0-9]+)/);
+            if (match && match[1]) {
+                spotifyId = match[1];
+            }
+        }
+        
+        errorMsg.style.display = 'none';
+        createBtn.disabled = true;
+        document.getElementById('btnText').textContent = 'Loading...';
+        document.getElementById('loader').style.display = 'flex';
+        document.getElementById('resultContainer').style.display = 'none';
+
+        try {
+            const docRef = await addDoc(collection(db, "gifts"), {
+                title: title,
+                message: msg,
+                spotifyId: spotifyId,
+                theme: selectedTheme,
+                timestamp: new Date()
+            });
+
+            let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            if (basePath === '') basePath = '';
+            const origin = window.location.origin;
+            const targetPage = selectedTheme === 'flower' ? 'flowergift.html' : 'giftweb.html';
+            
+            currentGeneratedUrl = `${origin}${basePath}/${targetPage}?id=${docRef.id}`;
+
+            setTimeout(() => {
+                const qrDiv = document.getElementById('qrcode');
+                qrDiv.innerHTML = '';
+                
+                new QRCode(qrDiv, {
+                    text: currentGeneratedUrl,
+                    width: 250,
+                    height: 250,
+                    colorDark: "#1a1025",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M 
+                });
+                
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+                createBtn.disabled = false;
+                document.getElementById('btnText').textContent = 'สร้าง QR Code ใหม่';
+            }, 1400); 
+
+        } catch (err) {
+            console.error(err);
+            errorMsg.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล กรุณาลองใหม่นะ';
+            errorMsg.style.display = 'block';
+            createBtn.disabled = false;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('btnText').textContent = 'สร้าง QR Code ของขวัญเลยย';
+        }
+    }
+
+    function downloadQR() {
+        const qrCanvas = qrcodeContainer.querySelector('canvas');
+        if (!qrCanvas) return;
+
+        const padding = 50; 
+        const outputCanvas = document.createElement('canvas');
+        const ctx = outputCanvas.getContext('2d');
+
+        outputCanvas.width = qrCanvas.width + (padding * 2);
+        outputCanvas.height = qrCanvas.height + (padding * 2);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
+        
+        ctx.save();
+        ctx.beginPath();
+        const cornerRadius = 20;
+        ctx.moveTo(0 + cornerRadius, 0);
+        ctx.lineTo(outputCanvas.width - cornerRadius, 0);
+        ctx.quadraticCurveTo(outputCanvas.width, 0, outputCanvas.width, 0 + cornerRadius);
+        ctx.lineTo(outputCanvas.width, outputCanvas.height - cornerRadius);
+        ctx.quadraticCurveTo(outputCanvas.width, outputCanvas.height, outputCanvas.width - cornerRadius, outputCanvas.height);
+        ctx.lineTo(0 + cornerRadius, outputCanvas.height);
+        ctx.quadraticCurveTo(0, outputCanvas.height, 0, outputCanvas.height - cornerRadius);
+        ctx.lineTo(0, 0 + cornerRadius);
+        ctx.quadraticCurveTo(0, 0, 0 + cornerRadius, 0);
+        ctx.closePath();
+        ctx.clip();
+        
+        ctx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
+        ctx.drawImage(qrCanvas, padding, padding);
+        ctx.restore();
+
+        const link = document.createElement('a');
+        link.download = 'EasyLove-YourGiftQR.png';
+        link.href = outputCanvas.toDataURL("image/png");
+        link.click();
+    }
+
+    function previewGift() {
+        if (currentGeneratedUrl) {
+            window.open(currentGeneratedUrl, '_blank');
+        }
+    }
+
+    createBtn.addEventListener('click', generateGift);
+    document.getElementById('saveBtn').addEventListener('click', downloadQR);
+    document.getElementById('previewBtn').addEventListener('click', previewGift);
+</script>
+
+</body>
+</html>
